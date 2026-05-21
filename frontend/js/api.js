@@ -1,9 +1,11 @@
-// js/api.js - Gateway functions for the REST Microservices
+// frontend/js/api.js - Gateway functions for the REST Microservices
+// Single entry point through API Gateway on port 8080
+const GATEWAY_BASE_URL = 'http://localhost:8080/api';
+
 const API_CONFIG = {
-    // Definiremos as portas temporárias, que poderão ser ajustadas depois que tivermos os backends
-    produtos: 'http://localhost:8081',
-    pedidos: 'http://localhost:8082',
-    clientes: 'http://localhost:8083/api'
+    produtos: `${GATEWAY_BASE_URL}/produtos`,
+    pedidos: `${GATEWAY_BASE_URL}/pedidos`,
+    clientes: `${GATEWAY_BASE_URL}/clientes`
 };
 
 const api = {
