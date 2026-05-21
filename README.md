@@ -1,6 +1,6 @@
-# 🏗️ API Gateway - Microsserviços UDESC
+# API Gateway - Microsserviços UDESC
 
-## 📋 Visão Geral
+## Visão Geral
 
 Arquitetura de microsserviços implementada com **API Gateway centralizado usando Nginx** como ponto de entrada único para todos os serviços. A solução expõe apenas a **porta 8080** para o mundo exterior, bloqueando acesso direto aos microsserviços.
 
@@ -14,7 +14,7 @@ Arquitetura de microsserviços implementada com **API Gateway centralizado usand
 
 ---
 
-## 🚀 Início Rápido
+## Início Rápido
 
 ### Pré-requisitos
 - Docker Desktop instalado e em execução
@@ -23,7 +23,7 @@ Arquitetura de microsserviços implementada com **API Gateway centralizado usand
 ### Executar a Aplicação
 ```bash
 # 1. Navegar para pasta do projeto
-cd c:\Users\leonardo_gaertner\Desktop\ars\75ARS---ENG---UDESC
+cd c:\path\75ARS---ENG---UDESC
 
 # 2. Iniciar infraestrutura completa
 docker-compose up -d
@@ -53,7 +53,7 @@ docker-compose down
 
 ---
 
-## 🔗 Roteamento de Requisições
+## Roteamento de Requisições
 
 O Nginx roteia as requisições da seguinte forma:
 
@@ -66,7 +66,7 @@ O Nginx roteia as requisições da seguinte forma:
 
 ---
 
-## 📂 Estrutura de Arquivos
+## Estrutura de Arquivos
 
 ```
 project-root/
@@ -94,7 +94,7 @@ project-root/
 
 ---
 
-## 🏛️ Arquitetura
+## Arquitetura
 
 ```
 ┌─────────────────────────────────────────────────────────┐
@@ -128,18 +128,18 @@ project-root/
 
 ---
 
-## 🔐 Segurança
+## Segurança
 
-✅ **Single Entry Point:** Apenas porta 8080 exposta externamente  
-✅ **Bloqueio de Portas:** Microsserviços não acessíveis diretamente (3000, 8081, 8082)  
-✅ **CORS Configurado:** Headers CORS no Nginx para permitir frontend  
-✅ **Rate Limiting:** 10 requisições por segundo por IP (burst de 20)  
-✅ **Proxy Headers:** X-Real-IP, X-Forwarded-For, X-Forwarded-Proto  
-✅ **Gzip Compression:** Respostas JSON comprimidas automaticamente  
+ **Single Entry Point:** Apenas porta 8080 exposta externamente  
+ **Bloqueio de Portas:** Microsserviços não acessíveis diretamente (3000, 8081, 8082)  
+ **CORS Configurado:** Headers CORS no Nginx para permitir frontend  
+ **Rate Limiting:** 10 requisições por segundo por IP (burst de 20)  
+ **Proxy Headers:** X-Real-IP, X-Forwarded-For, X-Forwarded-Proto  
+ **Gzip Compression:** Respostas JSON comprimidas automaticamente  
 
 ---
 
-## 📡 Configuração do Frontend
+## Configuração do Frontend
 
 O arquivo `frontend/js/api.js` foi atualizado para usar o gateway único:
 
@@ -161,7 +161,7 @@ api.delete('pedidos', '/123')  // → http://localhost:8080/api/pedidos/123
 
 ---
 
-## 🔧 Configuração do Nginx
+## Configuração do Nginx
 
 O arquivo `nginx/nginx.conf` contém:
 
@@ -187,7 +187,7 @@ location /api/clientes/ {
 
 ---
 
-## 🐛 Troubleshooting
+## Troubleshooting
 
 ### Problema: "Connection refused" ao acessar http://localhost:8080/health
 
@@ -234,9 +234,9 @@ docker-compose restart servico-clientes
 **Esperado - Porta bloqueada:**
 ```bash
 # Estas requisições DEVEM retornar "connection refused"
-curl http://localhost:3000/list --connect-timeout 2    # ❌ BLOQUEADO
-curl http://localhost:8081/list --connect-timeout 2    # ❌ BLOQUEADO
-curl http://localhost:8082/list --connect-timeout 2    # ❌ BLOQUEADO
+curl http://localhost:3000/list --connect-timeout 2    # BLOQUEADO
+curl http://localhost:8081/list --connect-timeout 2    # BLOQUEADO
+curl http://localhost:8082/list --connect-timeout 2    # BLOQUEADO
 ```
 
 ---
@@ -339,7 +339,7 @@ docker exec -it microsservicos-postgres psql -U admin -d microsservicos_db
 
 ---
 
-## 🎯 Casos de Uso Comuns
+## Casos de Uso Comuns
 
 ### Criar um novo pedido
 ```javascript
@@ -391,17 +391,17 @@ api.delete('pedidos', '/456')
 
 ---
 
-## 🚄 Performance
+## Performance
 
-- ✅ **Latência reduzida:** Single hop via gateway
-- ✅ **Compressão:** Gzip automático em respostas JSON
-- ✅ **Buffering inteligente:** 4KB buffer por conexão
-- ✅ **Timeouts:** 60s para evitar requisições penduradas
-- ✅ **Rate limiting:** Proteção contra abuso
+- **Latência reduzida:** Single hop via gateway
+- **Compressão:** Gzip automático em respostas JSON
+- **Buffering inteligente:** 4KB buffer por conexão
+- **Timeouts:** 60s para evitar requisições penduradas
+- **Rate limiting:** Proteção contra abuso
 
 ---
 
-## 📞 Fluxo de Requisição
+## Fluxo de Requisição
 
 ```
 1. Frontend executa:
@@ -426,7 +426,7 @@ api.delete('pedidos', '/456')
 
 ---
 
-## ✅ Checklist Pós-Implantação
+## Checklist Pós-Implantação
 
 - [ ] `docker-compose ps` mostra todos os serviços como "Up"
 - [ ] `curl http://localhost:8080/health` retorna `{"status":"ok"}`
@@ -438,7 +438,7 @@ api.delete('pedidos', '/456')
 
 ---
 
-## 🔮 Próximos Passos (Para Produção)
+## Próximos Passos (Para Produção)
 
 - [ ] Configurar HTTPS/SSL no Nginx
 - [ ] Implementar autenticação JWT no gateway
@@ -452,7 +452,7 @@ api.delete('pedidos', '/456')
 
 ---
 
-## 📚 Arquivos Importantes
+## Arquivos Importantes
 
 | Arquivo | Descrição |
 |---------|-----------|
@@ -466,7 +466,7 @@ api.delete('pedidos', '/456')
 
 ---
 
-## 💡 Padrão de Arquitetura
+## Padrão de Arquitetura
 
 Esta solução implementa o **API Gateway Pattern**, um dos padrões mais importantes em microsserviços:
 
@@ -480,7 +480,7 @@ Esta solução implementa o **API Gateway Pattern**, um dos padrões mais import
 
 ---
 
-## 📞 Suporte
+## Suporte
 
 ### Se algo não funcionar:
 
@@ -488,9 +488,3 @@ Esta solução implementa o **API Gateway Pattern**, um dos padrões mais import
 2. Veja os logs: `docker-compose logs -f`
 3. Reinicie os containers: `docker-compose restart`
 4. Limpe tudo e comece do zero: `docker-compose down -v && docker-compose up -d`
-
----
-
-**Status:** ✅ Pronto para Uso  
-**Data:** 21 de Maio de 2026  
-**Projeto:** Arquitetura de Microsserviços UDESC - ENG
