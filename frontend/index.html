@@ -53,19 +53,19 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const produtos = await window.api.get('produtos', '/produtos') || [];
+                const produtos = await window.api.get('produtos', '/') || []; // Changed
                 document.getElementById('stat-produtos').innerText = produtos.length;
-            } catch(e) { document.getElementById('stat-produtos').innerText = 'Erro'; }
+            } catch(e) { /* ... */ }
 
             try {
-                const clientes = await window.api.get('clientes', '/clientes') || [];
+                const clientes = await window.api.get('clientes', '/') || []; // Changed
                 document.getElementById('stat-clientes').innerText = clientes.length;
-            } catch(e) { document.getElementById('stat-clientes').innerText = 'Erro'; }
+            } catch(e) { /* ... */ }
 
             try {
-                const pedidos = await window.api.get('pedidos', '/pedidos') || [];
+                const pedidos = await window.api.get('pedidos', '/') || []; // Changed
                 document.getElementById('stat-pedidos').innerText = pedidos.length;
-            } catch(e) { document.getElementById('stat-pedidos').innerText = 'Erro'; }
+            } catch(e) { /* ... */ }
         });
     </script>
 </body>

@@ -17,7 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
             const valorTotal = preco * quantidade;
 
             try {
-                await window.api.post('pedidos', '/pedidos', { cliente, idProduto, quantidade, valorTotal, status: 'CRIADO' });
+                await window.api.post('pedidos', '', { cliente, idProduto, quantidade, valorTotal, status: 'CRIADO' });
                 alert('Pedido criado com sucesso!');
                 app.toggleActionPanel('panel-novo-pedido');
                 form.reset();
@@ -31,12 +31,12 @@ document.addEventListener('DOMContentLoaded', () => {
 
 async function carregarFormulariosPedido() {
     try {
-        const clientes = await window.api.get('clientes', '/clientes') || [];
+        const clientes = await window.api.get('clientes', '') || [];
         const selCliente = document.getElementById('cliente-pedido');
         selCliente.innerHTML = '<option value="">Selecione um cliente</option>' + 
             clientes.map(c => `<option value="${c.id}">${c.nome}</option>`).join('');
             
-        const produtos = await window.api.get('produtos', '/produtos') || [];
+        const produtos = await window.api.get('produtos', '') || [];
         const selProduto = document.getElementById('produto-pedido');
         selProduto.innerHTML = '<option value="">Selecione um produto</option>' + 
             produtos.map(p => `<option value="${p.id}" data-preco="${p.preco}">${p.nome} (R$ ${p.preco})</option>`).join('');
@@ -50,7 +50,7 @@ async function carregarPedidos() {
     if(!tbody) return;
     
     try {
-        const pedidos = await window.api.get('pedidos', '/pedidos');
+        const pedidos = await window.api.get('pedidos', '');
         
         tbody.innerHTML = '';
         if(pedidos.length === 0) {

@@ -3,7 +3,10 @@ package com.arquitetura.pedidos.service;
 import com.arquitetura.pedidos.model.Pedido;
 import com.arquitetura.pedidos.repository.PedidoRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.web.client.HttpClientErrorException;
+import org.springframework.web.client.RestTemplate;
 
 import java.util.List;
 import java.util.Optional;
@@ -13,6 +16,7 @@ import java.util.Optional;
 public class PedidoService {
 
     private final PedidoRepository pedidoRepository;
+    private final RestTemplate restTemplate;
 
     public List<Pedido> listarTodos() {
         return pedidoRepository.findAll();
@@ -23,7 +27,40 @@ public class PedidoService {
     }
 
     public Pedido salvar(Pedido pedido) {
+        validarCliente(pedido.getCliente());
+        validarProduto(pedido.getIdProduto());
+
         return pedidoRepository.save(pedido);
+    }
+
+    private void validarCliente(Object clienteId) {
+        try {
+            String urlCliente = "http://servico-clientes:3000/" + clienteId;
+            ResponseEntity<String> response = restTemplate.getForEntity(urlCliente, String.class);
+
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Cliente inválido ou não encontrado no Serviço de Clientes");
+            }
+        } catch (HttpClientErrorException.NotFound e) {
+            throw new RuntimeException("Falha na comunicação: Cliente não existe.");
+        } catch (Exception e) {
+            throw new RuntimeException("Serviço de Clientes indisponível no momento.");
+        }
+    }
+
+    private void validarProduto(Object produtoId) {
+        try {
+            String urlProduto = "http://servico-produtos:8081/produtos/" + produtoId;
+            ResponseEntity<String> response = restTemplate.getForEntity(urlProduto, String.class);
+
+            if (!response.getStatusCode().is2xxSuccessful()) {
+                throw new RuntimeException("Produto inválido ou não encontrado no Serviço de Produtos");
+            }
+        } catch (HttpClientErrorException.NotFound e) {
+            throw new RuntimeException("Falha na comunicação: Produto não existe.");
+        } catch (Exception e) {
+            throw new RuntimeException("Serviço de Produtos indisponível no momento.");
+        }
     }
 
     public Pedido atualizar(Long id, Pedido pedidoAtualizado) {

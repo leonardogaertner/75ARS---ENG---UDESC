@@ -11,7 +11,7 @@ app.use(cors());
 app.use(express.json());
 
 // Rotas
-app.use('/api/clientes', clientesRoutes);
+app.use('/', clientesRoutes);
 
 app.listen(PORT, () => {
     console.log(`Microsserviço de Clientes rodando na porta ${PORT}`);

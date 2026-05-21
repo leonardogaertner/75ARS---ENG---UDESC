@@ -1,8 +1,16 @@
 // js/clientes.js
+let editingClienteId = null;
+
 document.addEventListener('DOMContentLoaded', () => {
     carregarClientes();
     
     const form = document.getElementById('form-cliente');
+    const tabela = document.querySelector('#tabela-clientes tbody');
+
+    if (tabela) {
+        tabela.addEventListener('click', handleClienteTabelaClick);
+    }
+
     if(form) {
         form.addEventListener('submit', async (e) => {
             e.preventDefault();
@@ -10,11 +18,17 @@ document.addEventListener('DOMContentLoaded', () => {
             const email = document.getElementById('email-cliente').value;
             
             try {
-                await window.api.post('clientes', '/clientes', { nome, email });
-                console.log('API call - Cliente salvo:', { nome, email });
-                alert('Cliente salvo com sucesso!');
+                if (editingClienteId) {
+                    await window.api.put('clientes', `/${editingClienteId}`, { nome, email });
+                } else {
+                    await window.api.post('clientes', '', { nome, email });
+                }
+
+                console.log('API call - Cliente salvo:', { nome, email, id: editingClienteId });
+                alert(`Cliente ${editingClienteId ? 'atualizado' : 'salvo'} com sucesso!`);
                 app.toggleActionPanel('panel-novo-cliente');
                 form.reset();
+                editingClienteId = null;
                 carregarClientes();
             } catch(e) {
                 alert(`Erro ao salvar cliente: ${e.message}`);
@@ -28,7 +42,7 @@ async function carregarClientes() {
     if(!tbody) return;
     
     try {
-        const clientes = await window.api.get('clientes', '/clientes');
+        const clientes = await window.api.get('clientes', '');
         
         tbody.innerHTML = '';
         if(clientes.length === 0) {
@@ -43,13 +57,44 @@ async function carregarClientes() {
                 <td>${c.nome}</td>
                 <td>${c.email}</td>
                 <td class="text-right d-flex justify-between" style="justify-content: flex-end;">
-                    <button class="link-action">Editar</button>
-                    <button class="link-action">Excluir</button>
+                    <button class="link-action" data-action="edit" data-id="${c.id}">Editar</button>
+                    <button class="link-action" data-action="delete" data-id="${c.id}">Excluir</button>
                 </td>
             `;
             tbody.appendChild(tr);
         });
     } catch(e) {
         tbody.innerHTML = `<tr><td colspan="4" class="text-center font-data" style="color:red">Erro ao carregar dados da API: ${e.message}</td></tr>`;
+    }
+}
+
+async function handleClienteTabelaClick(event) {
+    const button = event.target.closest('button[data-action]');
+    if (!button) return;
+
+    const id = button.dataset.id;
+    const action = button.dataset.action;
+    if (!id || !action) return;
+
+    if (action === 'edit') {
+        const nome = button.closest('tr').querySelector('td:nth-child(2)').textContent;
+        const email = button.closest('tr').querySelector('td:nth-child(3)').textContent;
+
+        editingClienteId = id;
+        document.getElementById('nome-cliente').value = nome;
+        document.getElementById('email-cliente').value = email;
+        app.toggleActionPanel('panel-novo-cliente');
+    }
+
+    if (action === 'delete') {
+        const confirmed = confirm('Deseja excluir este cliente?');
+        if (!confirmed) return;
+
+        try {
+            await window.api.delete('clientes', `/${id}`);
+            carregarClientes();
+        } catch (e) {
+            alert(`Erro ao excluir cliente: ${e.message}`);
+        }
     }
 }
