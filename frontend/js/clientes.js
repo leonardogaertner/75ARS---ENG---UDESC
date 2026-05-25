@@ -1,39 +1,62 @@
 // js/clientes.js
 let editingClienteId = null;
 
-document.addEventListener('DOMContentLoaded', () => {
-    carregarClientes();
-    
-    const form = document.getElementById('form-cliente');
-    const tabela = document.querySelector('#tabela-clientes tbody');
-
-    if (tabela) {
-        tabela.addEventListener('click', handleClienteTabelaClick);
+// Aguarda a disponibilidade de window.api
+async function aguardarAPI(timeout = 5000) {
+    const inicio = Date.now();
+    while (!window.api) {
+        if (Date.now() - inicio > timeout) {
+            throw new Error('API não carregou no tempo esperado');
+        }
+        await new Promise(r => setTimeout(r, 50));
     }
+}
 
-    if(form) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nome = document.getElementById('nome-cliente').value;
-            const email = document.getElementById('email-cliente').value;
-            
-            try {
-                if (editingClienteId) {
-                    await window.api.put('clientes', `/${editingClienteId}`, { nome, email });
-                } else {
-                    await window.api.post('clientes', '', { nome, email });
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        console.log('[clientes.js] DOM carregado. Aguardando API...');
+        await aguardarAPI();
+        console.log('[clientes.js] API disponível. Carregando clientes...');
+        
+        carregarClientes();
+        
+        const form = document.getElementById('form-cliente');
+        const tabela = document.querySelector('#tabela-clientes tbody');
+
+        if (tabela) {
+            tabela.addEventListener('click', handleClienteTabelaClick);
+        }
+
+        if(form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const nome = document.getElementById('nome-cliente').value;
+                const email = document.getElementById('email-cliente').value;
+                
+                try {
+                    if (editingClienteId) {
+                        await window.api.put('clientes', `/${editingClienteId}`, { nome, email });
+                    } else {
+                        await window.api.post('clientes', '', { nome, email });
+                    }
+
+                    console.log('API call - Cliente salvo:', { nome, email, id: editingClienteId });
+                    alert(`Cliente ${editingClienteId ? 'atualizado' : 'salvo'} com sucesso!`);
+                    app.toggleActionPanel('panel-novo-cliente');
+                    form.reset();
+                    editingClienteId = null;
+                    carregarClientes();
+                } catch(e) {
+                    alert(`Erro ao salvar cliente: ${e.message}`);
                 }
-
-                console.log('API call - Cliente salvo:', { nome, email, id: editingClienteId });
-                alert(`Cliente ${editingClienteId ? 'atualizado' : 'salvo'} com sucesso!`);
-                app.toggleActionPanel('panel-novo-cliente');
-                form.reset();
-                editingClienteId = null;
-                carregarClientes();
-            } catch(e) {
-                alert(`Erro ao salvar cliente: ${e.message}`);
-            }
-        });
+            });
+        }
+    } catch (error) {
+        console.error('[clientes.js] Erro ao inicializar:', error);
+        const tbody = document.querySelector('#tabela-clientes tbody');
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="4" class="text-center font-data" style="color:red">Erro ao carregar módulo: ${error.message}</td></tr>`;
+        }
     }
 });
 
@@ -42,7 +65,9 @@ async function carregarClientes() {
     if(!tbody) return;
     
     try {
+        console.log('[carregarClientes] Iniciando...');
         const clientes = await window.api.get('clientes', '');
+        console.log('[carregarClientes] Clientes carregados:', clientes);
         
         tbody.innerHTML = '';
         if(clientes.length === 0) {

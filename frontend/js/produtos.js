@@ -3,46 +3,69 @@ let editingProdutoId = null;
 let editingProdutoQuantidade = 0;
 let editingProdutoDescricao = '';
 
-document.addEventListener('DOMContentLoaded', () => {
-    carregarProdutos();
-    
-    const form = document.getElementById('form-produto');
-    const tabela = document.querySelector('#tabela-produtos tbody');
-
-    if (tabela) {
-        tabela.addEventListener('click', handleProdutoTabelaClick);
+// Aguarda a disponibilidade de window.api
+async function aguardarAPI(timeout = 5000) {
+    const inicio = Date.now();
+    while (!window.api) {
+        if (Date.now() - inicio > timeout) {
+            throw new Error('API não carregou no tempo esperado');
+        }
+        await new Promise(r => setTimeout(r, 50));
     }
+}
 
-    if(form) {
-        form.addEventListener('submit', async (e) => {
-            e.preventDefault();
-            const nome = document.getElementById('nome-produto').value;
-            const preco = parseFloat(document.getElementById('preco-produto').value);
-            const payload = {
-                nome,
-                preco,
-                quantidadeEstoque: editingProdutoId ? editingProdutoQuantidade : 0,
-                descricao: editingProdutoId ? editingProdutoDescricao : ''
-            };
-            
-            try {
-                if (editingProdutoId) {
-                    await window.api.put('produtos', `/${editingProdutoId}`, payload);
-                } else {
-                    await window.api.post('produtos', '', payload);
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        console.log('[produtos.js] DOM carregado. Aguardando API...');
+        await aguardarAPI();
+        console.log('[produtos.js] API disponível. Carregando produtos...');
+        
+        carregarProdutos();
+        
+        const form = document.getElementById('form-produto');
+        const tabela = document.querySelector('#tabela-produtos tbody');
+
+        if (tabela) {
+            tabela.addEventListener('click', handleProdutoTabelaClick);
+        }
+
+        if(form) {
+            form.addEventListener('submit', async (e) => {
+                e.preventDefault();
+                const nome = document.getElementById('nome-produto').value;
+                const preco = parseFloat(document.getElementById('preco-produto').value);
+                const payload = {
+                    nome,
+                    preco,
+                    quantidadeEstoque: editingProdutoId ? editingProdutoQuantidade : 0,
+                    descricao: editingProdutoId ? editingProdutoDescricao : ''
+                };
+                
+                try {
+                    if (editingProdutoId) {
+                        await window.api.put('produtos', `/${editingProdutoId}`, payload);
+                    } else {
+                        await window.api.post('produtos', '', payload);
+                    }
+                    console.log('API call - Produto salvo:', { nome, preco, id: editingProdutoId });
+                    alert(`Produto ${editingProdutoId ? 'atualizado' : 'salvo'} com sucesso!`);
+                    app.toggleActionPanel('panel-novo-produto');
+                    form.reset();
+                    editingProdutoId = null;
+                    editingProdutoQuantidade = 0;
+                    editingProdutoDescricao = '';
+                    carregarProdutos(); // Recarregar tabela
+                } catch(e) {
+                    alert(`Erro ao salvar produto: ${e.message}`);
                 }
-                console.log('API call - Produto salvo:', { nome, preco, id: editingProdutoId });
-                alert(`Produto ${editingProdutoId ? 'atualizado' : 'salvo'} com sucesso!`);
-                app.toggleActionPanel('panel-novo-produto');
-                form.reset();
-                editingProdutoId = null;
-                editingProdutoQuantidade = 0;
-                editingProdutoDescricao = '';
-                carregarProdutos(); // Recarregar tabela
-            } catch(e) {
-                alert(`Erro ao salvar produto: ${e.message}`);
-            }
-        });
+            });
+        }
+    } catch (error) {
+        console.error('[produtos.js] Erro ao inicializar:', error);
+        const tbody = document.querySelector('#tabela-produtos tbody');
+        if (tbody) {
+            tbody.innerHTML = `<tr><td colspan="5" class="text-center font-data" style="color:red">Erro ao carregar módulo: ${error.message}</td></tr>`;
+        }
     }
 });
 

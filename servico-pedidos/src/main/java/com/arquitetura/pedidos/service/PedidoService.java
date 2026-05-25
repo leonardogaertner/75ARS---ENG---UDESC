@@ -26,6 +26,14 @@ public class PedidoService {
         return pedidoRepository.findById(id);
     }
 
+    public List<Pedido> buscarPorCliente(Long clienteId) {
+        return pedidoRepository.findByClienteId(clienteId);
+    }
+
+    public List<Pedido> buscarPorProduto(Long idProduto) {
+        return pedidoRepository.findByIdProduto(idProduto);
+    }
+
     public Pedido salvar(Pedido pedido) {
         validarCliente(pedido.getCliente());
         validarProduto(pedido.getIdProduto());
@@ -35,7 +43,8 @@ public class PedidoService {
 
     private void validarCliente(Object clienteId) {
         try {
-            String urlCliente = "http://servico-clientes:3000/" + clienteId;
+            // Usar o API Gateway em vez de conectar direto ao serviço
+            String urlCliente = "http://api-gateway:8080/api/clientes/" + clienteId;
             ResponseEntity<String> response = restTemplate.getForEntity(urlCliente, String.class);
 
             if (!response.getStatusCode().is2xxSuccessful()) {

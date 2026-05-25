@@ -24,6 +24,16 @@ public class PedidoController {
         return pedidoService.listarTodos();
     }
 
+    @GetMapping("/cliente/{clienteId}")
+    public List<Pedido> buscarPorCliente(@PathVariable Long clienteId) {
+        return pedidoService.buscarPorCliente(clienteId);
+    }
+
+    @GetMapping("/produto/{produtoId}")
+    public List<Pedido> buscarPorProduto(@PathVariable Long produtoId) {
+        return pedidoService.buscarPorProduto(produtoId);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<Pedido> buscarPorId(@PathVariable Long id) {
         return pedidoService.buscarPorId(id)

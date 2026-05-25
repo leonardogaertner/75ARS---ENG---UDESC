@@ -22,7 +22,7 @@ public class Pedido {
     private Long id;
 
     @Column(nullable = false)
-    private String cliente;
+    private Long clienteId;
 
     @Column(nullable = false)
     private Long idProduto;

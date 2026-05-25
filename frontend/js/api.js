@@ -28,12 +28,19 @@ const api = {
             const response = await window.fetch(url, fetchOptions);
             
             if (!response.ok) {
-                let errorDetails = '';
+                let errorMessage = `Error ${response.status}`;
                 try {
                     const text = await response.text();
-                    errorDetails = text;
-                } catch(e) {}
-                throw new Error(`Error ${response.status}: ${errorDetails}`);
+                    const errorData = JSON.parse(text);
+                    errorMessage = errorData.error || errorData.message || text;
+                } catch(e) {
+                    // Se não conseguir parsear como JSON, usa o texto bruto
+                    try {
+                        const text = await response.text();
+                        errorMessage = text || errorMessage;
+                    } catch(e2) {}
+                }
+                throw new Error(errorMessage);
             }
             
             if (response.status !== 204) {
