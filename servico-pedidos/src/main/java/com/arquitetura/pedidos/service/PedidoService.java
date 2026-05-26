@@ -35,16 +35,16 @@ public class PedidoService {
     }
 
     public Pedido salvar(Pedido pedido) {
-        validarCliente(pedido.getCliente());
+        validarCliente(pedido.getClienteId());
         validarProduto(pedido.getIdProduto());
 
         return pedidoRepository.save(pedido);
     }
 
-    private void validarCliente(Object clienteId) {
+    private void validarCliente(Long clienteId) {
         try {
-            // Usar o API Gateway em vez de conectar direto ao serviço
-            String urlCliente = "http://api-gateway:8080/api/clientes/" + clienteId;
+            // Comunicação direta com o Serviço de Clientes (sem passar pelo API Gateway)
+            String urlCliente = "http://servico-clientes:3000/" + clienteId;
             ResponseEntity<String> response = restTemplate.getForEntity(urlCliente, String.class);
 
             if (!response.getStatusCode().is2xxSuccessful()) {
@@ -57,7 +57,7 @@ public class PedidoService {
         }
     }
 
-    private void validarProduto(Object produtoId) {
+    private void validarProduto(Long produtoId) {
         try {
             String urlProduto = "http://servico-produtos:8081/produtos/" + produtoId;
             ResponseEntity<String> response = restTemplate.getForEntity(urlProduto, String.class);
@@ -74,7 +74,7 @@ public class PedidoService {
 
     public Pedido atualizar(Long id, Pedido pedidoAtualizado) {
         return pedidoRepository.findById(id).map(pedido -> {
-            pedido.setCliente(pedidoAtualizado.getCliente());
+            pedido.setClienteId(pedidoAtualizado.getClienteId());
             pedido.setIdProduto(pedidoAtualizado.getIdProduto());
             pedido.setQuantidade(pedidoAtualizado.getQuantidade());
             pedido.setValorTotal(pedidoAtualizado.getValorTotal());

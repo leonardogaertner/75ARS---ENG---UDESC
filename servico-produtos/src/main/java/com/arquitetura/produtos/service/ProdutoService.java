@@ -4,7 +4,6 @@ import com.arquitetura.produtos.model.Produto;
 import com.arquitetura.produtos.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.List;

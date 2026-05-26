@@ -10,5 +10,6 @@
             "database": "microsservicos_db",
             "username": "admin"
         }
-    ]
+    ],
+    "java.compile.nullAnalysis.mode": "automatic"
 }
