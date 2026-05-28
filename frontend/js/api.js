@@ -51,7 +51,7 @@ const api = {
         } catch (error) {
             console.error(`[API Error in ${domain}]`, error);
             // Em uma UI de produção dispararíamos um 'Toast' ou aviso pro user aqui,
-            // mas por ser clean/editorial, trataremos no catch de cada tela.
+            // mas por ser um projeto de faculdade, trataremos no catch de cada tela.
             throw error;
         }
     },

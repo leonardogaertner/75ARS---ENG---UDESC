@@ -81,9 +81,11 @@ async function carregarClientes() {
                 <td>${c.id}</td>
                 <td>${c.nome}</td>
                 <td>${c.email}</td>
-                <td class="text-right d-flex justify-between" style="justify-content: flex-end;">
-                    <button class="link-action" data-action="edit" data-id="${c.id}">Editar</button>
-                    <button class="link-action" data-action="delete" data-id="${c.id}">Excluir</button>
+                <td class="text-right">
+                    <div class="d-flex justify-between" style="justify-content: flex-end;">
+                        <button class="link-action" data-action="edit" data-id="${c.id}">Editar</button>
+                        <button class="link-action" data-action="delete" data-id="${c.id}">Excluir</button>
+                    </div>
                 </td>
             `;
             tbody.appendChild(tr);

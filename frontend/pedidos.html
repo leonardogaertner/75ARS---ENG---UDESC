@@ -51,6 +51,14 @@
                         <label for="quantidade-pedido">Quantidade</label>
                         <input type="number" min="1" id="quantidade-pedido" required />
                     </div>
+                    <div class="input-field">
+                        <label for="status-pedido">Status</label>
+                        <select id="status-pedido">
+                            <option value="CRIADO" selected>Criado</option>
+                            <option value="PAGO">Pago</option>
+                            <option value="CANCELADO">Cancelado</option>
+                        </select>
+                    </div>
                     <div class="action-bar mt-0">
                         <button type="button" onclick="app.toggleActionPanel('panel-novo-pedido')">Cancelar</button>
                         <button type="submit" class="primary">Concluir Pedido</button>
@@ -65,17 +73,33 @@
                             <th>Nº Doc</th>
                             <th>Cliente</th>
                             <th>Total (R$)</th>
+                            <th>Status</th>
                             <th>Data</th>
+                            <th>Detalhes</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td colspan="4" class="text-center">Carregando ordens...</td>
+                            <td colspan="6" class="text-center">Carregando ordens...</td>
                         </tr>
                     </tbody>
                 </table>
             </section>
         </main>
+    </div>
+
+    <div id="pedido-detalhes-modal" class="modal hidden">
+        <div class="modal-overlay" onclick="fecharModalDetalhes()"></div>
+        <div class="modal-content">
+            <button type="button" class="modal-close" onclick="fecharModalDetalhes()">×</button>
+            <h2>Detalhes do Pedido</h2>
+            <div class="modal-body" id="modal-detalhes-conteudo">
+                <p><strong>Produto:</strong> <span id="modal-produto-nome"></span></p>
+                <p><strong>Quantidade:</strong> <span id="modal-produto-quantidade"></span></p>
+                <p><strong>Valor Unitário:</strong> <span id="modal-produto-preco"></span></p>
+                <p><strong>Valor Total:</strong> <span id="modal-produto-total"></span></p>
+            </div>
+        </div>
     </div>
     
     <script src="js/api.js"></script>

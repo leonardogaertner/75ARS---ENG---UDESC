@@ -88,9 +88,11 @@ async function carregarProdutos() {
                 <td>${p.id}</td>
                 <td>${p.nome}</td>
                 <td>${app.formatCurrency(p.preco)}</td>
-                <td class="text-right d-flex justify-between" style="justify-content: flex-end;">
-                    <button class="link-action" data-action="edit" data-id="${p.id}" data-preco="${p.preco}" data-quantidade="${p.quantidadeEstoque}" data-descricao="${p.descricao || ''}">Editar</button>
-                    <button class="link-action" data-action="delete" data-id="${p.id}">Excluir</button>
+                <td class="text-right">
+                    <div class="d-flex justify-between" style="justify-content: flex-end;">
+                        <button class="link-action" data-action="edit" data-id="${p.id}" data-preco="${p.preco}" data-quantidade="${p.quantidadeEstoque}" data-descricao="${p.descricao || ''}">Editar</button>
+                        <button class="link-action" data-action="delete" data-id="${p.id}">Excluir</button>
+                    </div>
                 </td>
             `;
             tbody.appendChild(tr);
