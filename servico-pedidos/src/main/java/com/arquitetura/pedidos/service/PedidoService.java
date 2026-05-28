@@ -4,6 +4,7 @@ import com.arquitetura.pedidos.model.Pedido;
 import com.arquitetura.pedidos.repository.PedidoRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
@@ -22,7 +23,7 @@ public class PedidoService {
         return pedidoRepository.findAll();
     }
 
-    public Optional<Pedido> buscarPorId(Long id) {
+    public Optional<Pedido> buscarPorId(@NonNull Long id) {
         return pedidoRepository.findById(id);
     }
 
@@ -72,7 +73,7 @@ public class PedidoService {
         }
     }
 
-    public Pedido atualizar(Long id, Pedido pedidoAtualizado) {
+    public Pedido atualizar(@NonNull Long id, Pedido pedidoAtualizado) {
         return pedidoRepository.findById(id).map(pedido -> {
             pedido.setClienteId(pedidoAtualizado.getClienteId());
             pedido.setIdProduto(pedidoAtualizado.getIdProduto());
@@ -83,7 +84,7 @@ public class PedidoService {
         }).orElseThrow(() -> new RuntimeException("Pedido não encontrado"));
     }
 
-    public void deletar(Long id) {
+    public void deletar(@NonNull Long id) {
         pedidoRepository.deleteById(id);
     }
 }

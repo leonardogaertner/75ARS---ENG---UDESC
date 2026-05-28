@@ -2,8 +2,8 @@
 const ClienteModel = require('../models/clienteModel');
 
 async function clientePossuiPedidos(id) {
-    // Usar o API Gateway em vez de conectar direto
-    const url = `http://api-gateway:8080/api/pedidos/cliente/${id}`;
+    // Comunicação direta com o serviço de pedidos (sem passar pelo API Gateway)
+    const url = `http://servico-pedidos:8082/pedidos/cliente/${id}`;
 
     try {
         console.log(`[clientePossuiPedidos] Verificando pedidos para cliente: ${id} em ${url}`);
@@ -50,7 +50,7 @@ const clientesController = {
             console.log('[createCliente] Cliente criado com sucesso:', novoCliente);
             res.status(201).json(novoCliente);
         } catch (error) {
-            console.error('[createCliente] Erro ao criar cliente:', error.message);
+            console.error('[createCliente] Erro ao criar cliente:', error.stack || error.message);
             res.status(500).json({ error: 'Erro interno ao criar o cliente.', details: error.message });
         }
     },

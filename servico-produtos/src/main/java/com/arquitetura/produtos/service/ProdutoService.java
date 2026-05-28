@@ -3,6 +3,8 @@ package com.arquitetura.produtos.service;
 import com.arquitetura.produtos.model.Produto;
 import com.arquitetura.produtos.repository.ProdutoRepository;
 import lombok.RequiredArgsConstructor;
+
+import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -20,15 +22,15 @@ public class ProdutoService {
         return produtoRepository.findAll();
     }
 
-    public Optional<Produto> buscarPorId(Long id) {
+    public Optional<Produto> buscarPorId(@NonNull Long id) {
         return produtoRepository.findById(id);
     }
 
-    public Produto salvar(Produto produto) {
+    public Produto salvar(@NonNull Produto produto) {
         return produtoRepository.save(produto);
     }
 
-    public Produto atualizar(Long id, Produto produtoAtualizado) {
+    public Produto atualizar(@NonNull Long id, Produto produtoAtualizado) {
         return produtoRepository.findById(id).map(produto -> {
             produto.setNome(produtoAtualizado.getNome());
             produto.setDescricao(produtoAtualizado.getDescricao());
@@ -38,7 +40,7 @@ public class ProdutoService {
         }).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
     }
 
-    public void deletar(Long id) {
+    public void deletar(@NonNull Long id) {
         validarProdutoSemPedidos(id);
         produtoRepository.deleteById(id);
     }

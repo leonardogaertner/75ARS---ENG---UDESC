@@ -5,6 +5,7 @@ import com.arquitetura.pedidos.service.PedidoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,7 +36,7 @@ public class PedidoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Pedido> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Pedido> buscarPorId(@PathVariable @NonNull Long id) {
         return pedidoService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
@@ -47,7 +48,7 @@ public class PedidoController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Pedido> atualizar(@PathVariable Long id, @RequestBody Pedido pedido) {
+    public ResponseEntity<Pedido> atualizar(@PathVariable @NonNull Long id, @RequestBody Pedido pedido) {
         try {
             return ResponseEntity.ok(pedidoService.atualizar(id, pedido));
         } catch (RuntimeException e) {
@@ -56,7 +57,7 @@ public class PedidoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deletar(@PathVariable Long id) {
+    public ResponseEntity<Void> deletar(@PathVariable @NonNull Long id) {
         pedidoService.deletar(id);
         return ResponseEntity.noContent().build();
     }

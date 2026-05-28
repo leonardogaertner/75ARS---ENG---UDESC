@@ -5,6 +5,7 @@ import com.arquitetura.produtos.service.ProdutoService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.lang.NonNull;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -25,19 +26,19 @@ public class ProdutoController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Produto> buscarPorId(@PathVariable Long id) {
+    public ResponseEntity<Produto> buscarPorId(@PathVariable @NonNull Long id) {
         return produtoService.buscarPorId(id)
                 .map(ResponseEntity::ok)
                 .orElse(ResponseEntity.notFound().build());
     }
 
     @PostMapping
-    public ResponseEntity<Produto> criar(@RequestBody Produto produto) {
+    public ResponseEntity<Produto> criar(@RequestBody @NonNull Produto produto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.salvar(produto));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Produto> atualizar(@PathVariable Long id, @RequestBody Produto produto) {
+    public ResponseEntity<Produto> atualizar(@PathVariable @NonNull Long id, @RequestBody Produto produto) {
         try {
             return ResponseEntity.ok(produtoService.atualizar(id, produto));
         } catch (RuntimeException e) {
@@ -46,7 +47,7 @@ public class ProdutoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<?> deletar(@PathVariable Long id) {
+    public ResponseEntity<?> deletar(@PathVariable @NonNull Long id) {
         try {
             produtoService.deletar(id);
             return ResponseEntity.noContent().build();
