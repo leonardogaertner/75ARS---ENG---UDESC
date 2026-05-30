@@ -28,12 +28,17 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const produtoNode = document.getElementById('produto-pedido');
                 const statusNode = document.getElementById('status-pedido');
                 
-                const clienteId = parseInt(clienteNode.value);
-                const idProduto = parseInt(produtoNode.value);
-                const quantidade = parseInt(document.getElementById('quantidade-pedido').value);
+                const clienteId = parseInt(clienteNode.value, 10);
+                const idProduto = parseInt(produtoNode.value, 10);
+                const quantidade = parseInt(document.getElementById('quantidade-pedido').value, 10);
                 const status = statusNode.value || 'CRIADO';
-                const preco = parseFloat(produtoNode.options[produtoNode.selectedIndex].dataset.preco || 0);
+                const preco = parseFloat(produtoNode.options[produtoNode.selectedIndex]?.dataset?.preco || 0);
                 const valorTotal = preco * quantidade;
+
+                if (!Number.isInteger(clienteId) || clienteId <= 0 || !Number.isInteger(idProduto) || idProduto <= 0 || !Number.isInteger(quantidade) || quantidade <= 0) {
+                    alert('Por favor selecione cliente, produto e quantidade válidos antes de enviar.');
+                    return;
+                }
 
                 try {
                     await window.api.post('pedidos', '', { clienteId, idProduto, quantidade, valorTotal, status });

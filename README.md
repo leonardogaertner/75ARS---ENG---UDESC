@@ -26,9 +26,15 @@ Arquitetura de microsserviços implementada com **API Gateway centralizado usand
 cd c:\path\75ARS---ENG---UDESC
 
 # 2. Iniciar infraestrutura completa
-docker-compose up -d
+docker-compose up -d --build
 
 # Aguardar 2-5 minutos (builds Docker executando)
+```
+
+> Se você alterar código em `servico-pedidos` ou `servico-produtos`, execute:
+> ```bash
+docker-compose build servico-pedidos
+docker-compose up -d servico-pedidos
 ```
 
 ### Validar Execução

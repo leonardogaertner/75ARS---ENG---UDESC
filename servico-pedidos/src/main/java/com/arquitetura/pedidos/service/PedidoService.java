@@ -1,16 +1,20 @@
 package com.arquitetura.pedidos.service;
 
-import com.arquitetura.pedidos.model.Pedido;
-import com.arquitetura.pedidos.repository.PedidoRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Optional;
+
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.server.ResponseStatusException;
 
-import java.util.List;
-import java.util.Optional;
+import com.arquitetura.pedidos.model.Pedido;
+import com.arquitetura.pedidos.repository.PedidoRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -49,12 +53,12 @@ public class PedidoService {
             ResponseEntity<String> response = restTemplate.getForEntity(urlCliente, String.class);
 
             if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("Cliente inválido ou não encontrado no Serviço de Clientes");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cliente inválido ou não encontrado no Serviço de Clientes");
             }
         } catch (HttpClientErrorException.NotFound e) {
-            throw new RuntimeException("Falha na comunicação: Cliente não existe.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Falha na comunicação: Cliente não existe.");
         } catch (Exception e) {
-            throw new RuntimeException("Serviço de Clientes indisponível no momento.");
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Serviço de Clientes indisponível no momento.");
         }
     }
 
@@ -64,12 +68,12 @@ public class PedidoService {
             ResponseEntity<String> response = restTemplate.getForEntity(urlProduto, String.class);
 
             if (!response.getStatusCode().is2xxSuccessful()) {
-                throw new RuntimeException("Produto inválido ou não encontrado no Serviço de Produtos");
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Produto inválido ou não encontrado no Serviço de Produtos");
             }
         } catch (HttpClientErrorException.NotFound e) {
-            throw new RuntimeException("Falha na comunicação: Produto não existe.");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Falha na comunicação: Produto não existe.");
         } catch (Exception e) {
-            throw new RuntimeException("Serviço de Produtos indisponível no momento.");
+            throw new ResponseStatusException(HttpStatus.SERVICE_UNAVAILABLE, "Serviço de Produtos indisponível no momento.");
         }
     }
 
