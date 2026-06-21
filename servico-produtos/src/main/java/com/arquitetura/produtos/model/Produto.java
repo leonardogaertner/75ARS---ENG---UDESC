@@ -22,8 +22,6 @@ public class Produto {
     @Column(nullable = false)
     private String nome;
 
-    private String descricao;
-
     @Column(nullable = false)
     private BigDecimal preco;
 

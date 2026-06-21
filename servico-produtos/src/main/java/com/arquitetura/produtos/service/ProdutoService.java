@@ -1,15 +1,16 @@
 package com.arquitetura.produtos.service;
 
-import com.arquitetura.produtos.model.Produto;
-import com.arquitetura.produtos.repository.ProdutoRepository;
-import lombok.RequiredArgsConstructor;
+import java.util.List;
+import java.util.Optional;
 
 import org.springframework.lang.NonNull;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.List;
-import java.util.Optional;
+import com.arquitetura.produtos.model.Produto;
+import com.arquitetura.produtos.repository.ProdutoRepository;
+
+import lombok.RequiredArgsConstructor;
 
 @Service
 @RequiredArgsConstructor
@@ -33,7 +34,6 @@ public class ProdutoService {
     public Produto atualizar(@NonNull Long id, Produto produtoAtualizado) {
         return produtoRepository.findById(id).map(produto -> {
             produto.setNome(produtoAtualizado.getNome());
-            produto.setDescricao(produtoAtualizado.getDescricao());
             produto.setPreco(produtoAtualizado.getPreco());
             produto.setQuantidadeEstoque(produtoAtualizado.getQuantidadeEstoque());
             return produtoRepository.save(produto);

@@ -45,11 +45,6 @@ curl http://localhost:8080/health
 
 # Acessar frontend
 http://localhost:8080/
-
-# Testar roteamento (substitua /list pelo seu endpoint)
-curl http://localhost:8080/api/clientes/list
-curl http://localhost:8080/api/produtos/list
-curl http://localhost:8080/api/pedidos/list
 ```
 
 ### Parar a Infraestrutura

@@ -15,7 +15,6 @@ CREATE TABLE clientes.cliente (
     id SERIAL PRIMARY KEY,
     nome VARCHAR(150) NOT NULL,
     email VARCHAR(150) UNIQUE NOT NULL,
-    telefone VARCHAR(20)
 );
 
 -- ==========================================

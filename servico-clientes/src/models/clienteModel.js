@@ -17,7 +17,6 @@ const ClienteModel = {
                     id SERIAL PRIMARY KEY,
                     nome VARCHAR(100) NOT NULL,
                     email VARCHAR(100) UNIQUE NOT NULL,
-                    telefone VARCHAR(20),
                     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP
                 )
             `;
@@ -30,9 +29,9 @@ const ClienteModel = {
     },
 
     create: async (cliente) => {
-        const { nome, email, telefone } = cliente;
-        const query = `INSERT INTO ${SCHEMA}.clientes (nome, email, telefone) VALUES ($1, $2, $3) RETURNING *`;
-        const values = [nome, email, telefone];
+        const { nome, email} = cliente;
+        const query = `INSERT INTO ${SCHEMA}.clientes (nome, email) VALUES ($1, $2) RETURNING *`;
+        const values = [nome, email];
         try {
             const res = await pool.query(query, values);
             return res.rows[0];
@@ -65,9 +64,9 @@ const ClienteModel = {
     },
 
     update: async (id, cliente) => {
-        const { nome, email, telefone } = cliente;
-        const query = `UPDATE ${SCHEMA}.clientes SET nome = $1, email = $2, telefone = $3 WHERE id = $4 RETURNING *`;
-        const values = [nome, email, telefone, id];
+        const { nome, email} = cliente;
+        const query = `UPDATE ${SCHEMA}.clientes SET nome = $1, email = $2 WHERE id = $3 RETURNING *`;
+        const values = [nome, email, id];
         try {
             const res = await pool.query(query, values);
             return res.rows[0];

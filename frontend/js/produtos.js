@@ -1,7 +1,6 @@
 // js/produtos.js
 let editingProdutoId = null;
 let editingProdutoQuantidade = 0;
-let editingProdutoDescricao = '';
 
 // Aguarda a disponibilidade de window.api
 async function aguardarAPI(timeout = 5000) {
@@ -37,8 +36,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const payload = {
                     nome,
                     preco,
-                    quantidadeEstoque: editingProdutoId ? editingProdutoQuantidade : 0,
-                    descricao: editingProdutoId ? editingProdutoDescricao : ''
+                    quantidadeEstoque: editingProdutoId ? editingProdutoQuantidade : 0
                 };
                 
                 try {
@@ -53,7 +51,6 @@ document.addEventListener('DOMContentLoaded', async () => {
                     form.reset();
                     editingProdutoId = null;
                     editingProdutoQuantidade = 0;
-                    editingProdutoDescricao = '';
                     carregarProdutos(); // Recarregar tabela
                 } catch(e) {
                     alert(`Erro ao salvar produto: ${e.message}`);
@@ -90,7 +87,7 @@ async function carregarProdutos() {
                 <td>${app.formatCurrency(p.preco)}</td>
                 <td class="text-right">
                     <div class="d-flex justify-between" style="justify-content: flex-end;">
-                        <button class="link-action" data-action="edit" data-id="${p.id}" data-preco="${p.preco}" data-quantidade="${p.quantidadeEstoque}" data-descricao="${p.descricao || ''}">Editar</button>
+                        <button class="link-action" data-action="edit" data-id="${p.id}" data-preco="${p.preco}" data-quantidade="${p.quantidadeEstoque}"}">Editar</button>
                         <button class="link-action" data-action="delete" data-id="${p.id}">Excluir</button>
                     </div>
                 </td>
@@ -114,7 +111,6 @@ async function handleProdutoTabelaClick(event) {
         const nome = button.closest('tr').querySelector('td:nth-child(2)').textContent;
         const preco = parseFloat(button.dataset.preco || '0');
         editingProdutoQuantidade = parseInt(button.dataset.quantidade || '0', 10);
-        editingProdutoDescricao = button.dataset.descricao || '';
         document.getElementById('preco-produto').value = preco;
         app.toggleActionPanel('panel-novo-produto');
     }

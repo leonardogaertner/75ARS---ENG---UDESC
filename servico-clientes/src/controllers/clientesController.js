@@ -38,15 +38,15 @@ async function clientePossuiPedidos(id) {
 const clientesController = {
     createCliente: async (req, res) => {
         try {
-            const { nome, email, telefone } = req.body;
-            console.log('[createCliente] Recebido:', { nome, email, telefone });
+            const { nome, email} = req.body;
+            console.log('[createCliente] Recebido:', { nome, email});
             
             if (!nome || !email) {
                 console.warn('[createCliente] Validação falhou: Nome ou email ausentes');
                 return res.status(400).json({ error: 'Nome e email são obrigatórios.' });
             }
             
-            const novoCliente = await ClienteModel.create({ nome, email, telefone });
+            const novoCliente = await ClienteModel.create({ nome, email});
             console.log('[createCliente] Cliente criado com sucesso:', novoCliente);
             res.status(201).json(novoCliente);
         } catch (error) {
@@ -87,10 +87,10 @@ const clientesController = {
     updateCliente: async (req, res) => {
         try {
             const { id } = req.params;
-            const { nome, email, telefone } = req.body;
-            console.log('[updateCliente] Atualizando cliente:', id, { nome, email, telefone });
+            const { nome, email} = req.body;
+            console.log('[updateCliente] Atualizando cliente:', id, { nome, email});
             
-            const clienteAtualizado = await ClienteModel.update(id, { nome, email, telefone });
+            const clienteAtualizado = await ClienteModel.update(id, { nome, email});
             
             if (!clienteAtualizado) {
                 console.warn('[updateCliente] Cliente não encontrado:', id);
