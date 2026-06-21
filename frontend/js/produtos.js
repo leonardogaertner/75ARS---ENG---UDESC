@@ -35,8 +35,7 @@ document.addEventListener('DOMContentLoaded', async () => {
                 const preco = parseFloat(document.getElementById('preco-produto').value);
                 const payload = {
                     nome,
-                    preco,
-                    quantidadeEstoque: editingProdutoId ? editingProdutoQuantidade : 0
+                    preco
                 };
                 
                 try {
@@ -87,7 +86,7 @@ async function carregarProdutos() {
                 <td>${app.formatCurrency(p.preco)}</td>
                 <td class="text-right">
                     <div class="d-flex justify-between" style="justify-content: flex-end;">
-                        <button class="link-action" data-action="edit" data-id="${p.id}" data-preco="${p.preco}" data-quantidade="${p.quantidadeEstoque}"}">Editar</button>
+                        <button class="link-action" data-action="edit" data-id="${p.id}" data-preco="${p.preco}">Editar</button>
                         <button class="link-action" data-action="delete" data-id="${p.id}">Excluir</button>
                     </div>
                 </td>

@@ -16,5 +16,5 @@ spring:
     properties:
       hibernate:
         format_sql: true
-        default_schema: produtos_schema
+        default_schema: produtos
         hbm2ddl.create_namespaces: true

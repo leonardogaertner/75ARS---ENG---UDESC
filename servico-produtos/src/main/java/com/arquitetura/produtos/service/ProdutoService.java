@@ -35,7 +35,6 @@ public class ProdutoService {
         return produtoRepository.findById(id).map(produto -> {
             produto.setNome(produtoAtualizado.getNome());
             produto.setPreco(produtoAtualizado.getPreco());
-            produto.setQuantidadeEstoque(produtoAtualizado.getQuantidadeEstoque());
             return produtoRepository.save(produto);
         }).orElseThrow(() -> new RuntimeException("Produto não encontrado"));
     }
